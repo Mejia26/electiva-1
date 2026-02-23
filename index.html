@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Message Scheduler</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/src/style.css">
+  </head>
+  <body class="bg-gradient-to-br from-indigo-50 to-blue-100 min-h-screen font-sans text-gray-800">
+    <div class="container mx-auto px-4 py-12 max-w-5xl">
+      <header class="mb-10 text-center">
+        <h1 class="text-4xl font-extrabold text-indigo-900 tracking-tight">Smart Scheduler</h1>
+        <p class="text-gray-500 mt-2">Automate your communications seamlessly.</p>
+      </header>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+          <h2 class="text-xl font-bold mb-6 text-gray-700">Compose Message</h2>
+          
+          <div class="mb-5">
+            <label class="block text-sm font-medium text-gray-600 mb-2">Recipient</label>
+            <input type="text" id="recipient" placeholder="ej. team@company.com" class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-indigo-400 outline-none transition-all">
+          </div>
+
+          <div class="mb-5">
+            <label class="block text-sm font-medium text-gray-600 mb-2">Message</label>
+            <textarea id="message-body" rows="3" placeholder="Write your message here..." class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-indigo-400 outline-none transition-all"></textarea>
+          </div>
+
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-600 mb-2">Schedule Date & Time</label>
+            <input type="datetime-local" id="schedule-time" class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-indigo-400 outline-none transition-all">
+          </div>
+
+          <div id="error-alert" class="hidden mb-4 p-3 bg-red-50 text-red-600 text-sm rounded-lg border border-red-100"></div>
+
+          <button id="schedule-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition-colors shadow-md hover:shadow-lg transform active:scale-95">
+            Schedule to Send
+          </button>
+        </div>
+
+        <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 flex flex-col">
+          <h2 class="text-xl font-bold mb-6 text-gray-700">Upcoming Queue</h2>
+          <div id="queue-list" class="flex-1 overflow-y-auto space-y-4">
+            <div class="text-center text-gray-400 mt-10 italic" id="empty-state">
+              No messages scheduled yet.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

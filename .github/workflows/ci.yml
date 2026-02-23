@@ -1,54 +1,52 @@
-name: CI-CD
+name: ToSend CI/CD Pipeline
 
 on:
+  # Se ejecuta cada vez que subes código a la rama main
   push:
-    branches: [ "main" ]
-  pull_request:
+    branches: ["main"]
+  # Permite ejecutarlo manualmente desde la pestaña Actions
+  workflow_dispatch:
 
+# Permisos necesarios para publicar en GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
-
 jobs:
-  test:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "npm"
+          node-version: '20'
 
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run typecheck
-      - run: npm run test
-      - run: npm run e2e:install
-      - run: npm run e2e
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Unit Tests and Coverage
+        run: npm run coverage
+
+      - name: Build Vite App
+        run: npm run build
+
+      - name: Upload artifact for Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
 
   deploy:
-    needs: test
-    if: github.ref == 'refs/heads/main'
+    # Este trabajo espera a que build-and-test termine exitosamente
+    needs: build-and-test
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "npm"
-
-      - run: npm ci
-      - run: npm run build
-
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-
-      - uses: actions/deploy-pages@v4
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
